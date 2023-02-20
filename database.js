@@ -14,9 +14,7 @@ database
 
   .query("select *, NULL AS hashedPassword from users")
 
-  .then(([users]) => {
-    console.log(users);
-  })
+  .then(([users]) => {})
 
   .catch((err) => {
     console.error(err);
