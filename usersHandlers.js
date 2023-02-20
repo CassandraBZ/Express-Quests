@@ -6,7 +6,7 @@ const database = require("./database");
 const getUsers = (req, res) => {
   database
 
-    .query("select * from users")
+    .query("select *, NULL AS hashedPassword from users")
 
     .then(([users]) => {
       res.json(users);
@@ -25,7 +25,7 @@ const getUsersById = (req, res) => {
 
   database
 
-    .query("select * from users where id = ?", [id])
+    .query("select *, NULL AS hashedPassword from users where id = ?", [id])
 
     .then(([users]) => {
       if (users[0] != null) {
@@ -44,14 +44,15 @@ const getUsersById = (req, res) => {
 };
 
 const postUser = (req, res) => {
-  const { firstname, lastname, email, city, language } = req.body;
+  const { firstname, lastname, email, city, language, hashedPassword } =
+    req.body;
 
   database
 
     .query(
-      "INSERT INTO users(firstname, lastname, email, city, language) VALUES (?, ?, ?, ?, ?)",
+      "INSERT INTO users(firstname, lastname, email, city, language, hashedPassword) VALUES (?, ?, ?, ?, ?, ?)",
 
-      [firstname, lastname, email, city, language]
+      [firstname, lastname, email, city, language, hashedPassword]
     )
 
     .then(([result]) => {
@@ -68,14 +69,15 @@ const postUser = (req, res) => {
 const updateUser = (req, res) => {
   const id = parseInt(req.params.id);
 
-  const { firstname, lastname, email, city, language } = req.body;
+  const { firstname, lastname, email, city, language, hashedPassword } =
+    req.body;
 
   database
 
     .query(
-      "update movies set firstname = ?, lastname = ?, email = ?, city = ?, language = ? where id = ?",
+      "update users set firstname = ?, lastname = ?, email = ?, city = ?, language = ?, hashedPassword = ? where id = ?",
 
-      [firstname, lastname, email, city, language, id]
+      [firstname, lastname, email, city, language, hashedPassword, id]
     )
 
     .then(([result]) => {
